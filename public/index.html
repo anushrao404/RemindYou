@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="https://unpkg.com/ionicons@6.0.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@6.0.0/dist/ionicons/ionicons.js"></script>
+  <title>RemindYou</title>
+  <style>
+    /* Global styles */
+/* Global styles */
+/* Base Styling */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(to bottom, #2e3192, #1bffff);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  overflow: hidden;
+}
+
+/* Title Section */
+.title {
+  font-size: 4rem;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #ffffff;
+  background: linear-gradient(to right, #f6d365, #fda085);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3);
+  animation: slideIn 1.5s ease-in-out;
+}
+
+/* Button Container */
+.buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeInUp 2s ease-in-out;
+}
+
+/* Buttons */
+.btn {
+  padding: 15px 40px;
+  font-size: 1.4rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  color: #fff;
+  cursor: pointer;
+  text-transform: uppercase;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  transition: transform 0.4s ease, box-shadow 0.4s ease, background 0.4s ease;
+}
+
+.btn:hover {
+  transform: scale(1.15);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: linear-gradient(135deg, #2575fc, #6a11cb);
+}
+
+.btn a {
+  text-decoration: none;
+  color: inherit;
+  font-weight: 700;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Footer Styles */
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: #444;
+  color: #fff;
+  padding: 10px 0;
+  font-size: 0.8rem;
+  font-weight: normal;
+  z-index: 1000;
+  border-top: 1px solid #ccc;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.footer p {
+  margin: 0;
+}
+
+.social-icons {
+  position: absolute;
+  right: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.social-icons a {
+  margin: 0 8px;
+  font-size: 1.5rem;
+  color: #fff;
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.social-icons a:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* Hover effect for icons */
+.social-icons ion-icon {
+  transition: transform 0.3s ease, filter 0.3s ease;
+}
+
+.social-icons ion-icon:hover {
+  transform: scale(1.1);
+  filter: brightness(1.2);
+}
+
+/* Media Queries */
+
+/* For small screens (mobiles) */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  .buttons {
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .btn {
+    padding: 12px 30px;
+    font-size: 1.2rem;
+  }
+
+  .footer {
+    padding: 12px 0;
+    font-size: 0.75rem;
+  }
+
+  .social-icons a {
+    font-size: 1.3rem;
+  }
+
+  /* Make the social icons stack vertically in small screens */
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .social-icons {
+    position: static;
+    margin-top: 10px;
+    justify-content: center;
+  }
+}
+
+/* For extra small screens (very small phones) */
+@media (max-width: 480px) {
+  .title {
+    font-size: 2.5rem;
+  }
+
+  .buttons {
+    gap: 10px;
+  }
+
+  .btn {
+    padding: 10px 25px;
+    font-size: 1rem;
+  }
+
+  .footer {
+    font-size: 0.6rem;
+  }
+
+  .social-icons a {
+    font-size: 1.1rem;
+  }
+
+  /* Ensure the social icons are stacked properly on very small screens */
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .social-icons {
+    margin-top: 10px;
+    justify-content: center;
+  }
+}
+
+
+  </style>
+</head>
+<body>
+  <!-- Title -->
+  <div class="title">RemindYou</div>
+
+  <!-- Buttons -->
+  <div class="buttons">
+    <button class="btn"><a href="login.html">Login</a></button>
+    <button class="btn"><a href="register.html">Sign Up</a></button>
+  </div>
+
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2025 Anush Rao. All rights reserved. | Empowering you to build lasting habits.</p>
+      <div class="social-icons">
+        <a href="https://www.facebook.com/Anush.Rao.t" target="_blank" class="social-icon facebook" aria-label="Facebook">
+          <ion-icon name="logo-facebook"></ion-icon>
+        </a>
+        <a href="https://x.com/t_anushrao" target="_blank" class="social-icon twitter" aria-label="Twitter">
+          <ion-icon name="logo-twitter"></ion-icon>
+        </a>
+        <a href="https://www.instagram.com/anush.rao.t/" target="_blank" class="social-icon instagram" aria-label="Instagram">
+          <ion-icon name="logo-instagram"></ion-icon>
+        </a>
+        <a href="https://www.linkedin.com/in/anushrao/" target="_blank" class="social-icon linkedin" aria-label="LinkedIn">
+          <ion-icon name="logo-linkedin"></ion-icon>
+        </a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

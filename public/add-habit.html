@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Ionicons CDN -->
+    <script type="module" src="https://unpkg.com/ionicons@6.0.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@6.0.0/dist/ionicons/ionicons.js"></script>
+  
+  <title>Add Habit</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      min-height: 100%;
+      padding: 0 10px; /* Added padding to ensure spacing on left/right */
+    }
+    
+    .container {
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      margin: 30px auto; /* Ensure container is centered with margin */
+      box-sizing: border-box;
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    
+    input, select, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    
+    textarea {
+      resize: none;
+    }
+    
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+    
+    button:hover {
+      background-color: #0056b3;
+    }
+    
+    /* Footer Styles */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #444;
+      color: #fff;
+      padding: 20px;
+      font-size: 0.8rem;
+      font-weight: normal;
+      z-index: 1000;
+      border-top: 1px solid #ccc;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    .footer p {
+      margin: 0;
+    }
+    
+    .social-icons {
+      position: absolute;
+      right: 20px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .social-icons a {
+      margin: 0 8px;
+      font-size: 1.5rem;
+      color: #fff;
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+    
+    .social-icons ion-icon {
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    
+    .social-icons ion-icon:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 1024px) {
+      .container {
+        width: 80%;
+        padding: 18px;
+        margin: 20px auto; /* Adjusting margin for mid-size screens */
+      }
+    
+      input, select, textarea, button {
+        padding: 12px; /* Adjusting padding for more flexibility */
+      }
+    }
+    
+    @media (max-width: 768px) {
+      body {
+        padding: 0 15px; /* Added padding for medium screens */
+      }
+    
+      .container {
+        width: 90%;
+        padding: 18px;
+        margin: 20px auto;
+      }
+    
+      h1 {
+        font-size: 24px;
+      }
+    
+      input, select, textarea, button {
+        font-size: 14px;
+        padding: 10px;
+      }
+    
+      button {
+        font-size: 14px;
+      }
+    
+      .footer {
+        padding: 20px;
+        font-size: 0.75rem;
+      }
+    
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+      }
+    
+      .social-icons {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+      }
+    
+      .social-icons a {
+        font-size: 1.3rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      body {
+        padding: 0 12px; /* Padding for smaller screens */
+      }
+    
+      .container {
+        width: 100%;
+        padding: 16px;
+        margin: 20px auto;
+      }
+    
+      h1 {
+        font-size: 20px;
+      }
+    
+      input, select, textarea, button {
+        font-size: 12px;
+        padding: 8px;
+      }
+    
+      button {
+        font-size: 12px;
+      }
+    
+      .footer {
+        padding: 18px 0;
+        font-size: 0.65rem;
+      }
+    
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+      }
+    
+      .social-icons {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+      }
+    
+      .social-icons a {
+        font-size: 1.2rem;
+      }
+    }
+    
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Add Habit</h1>
+    <form id="add-habit-form">
+      <label for="habit-name">Habit Name</label>
+      <input type="text" id="habit-name" name="habit-name" placeholder="Enter habit name" required>
+
+      <label for="time">Time</label>
+      <input type="time" id="time" name="time" required>
+
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required>
+
+      <label for="frequency">Frequency</label>
+      <select id="frequency" name="frequency" required>
+        <option value="onetime">Onetime</option>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+
+      </select>
+
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="4" placeholder="Describe your habit"></textarea>
+
+      <button type="submit">Add Habit</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("add-habit-form").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+         
+     const username = sessionStorage.getItem("username");
+     const token = sessionStorage.getItem("authToken");
+     if (!token ||!username) {
+       alert("User not logged in. Please log in first.");
+       window.location.href = "login.html"; // Redirect to login page if no username
+       return;
+     }
+  
+      const habitName = document.getElementById("habit-name").value;
+      const time = document.getElementById("time").value;
+      const date = document.getElementById("date").value;
+      const frequency = document.getElementById("frequency").value;
+      const description = document.getElementById("description").value; 
+
+      const habit = {
+          username, // Add the username here
+          habitName,
+          time,
+          date,
+          frequency,
+          description,
+        };
+    console.log(habit);  // Check the habit object
+
+      try {
+        const response = await fetch("http://localhost:5000/habits", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(habit),
+        });
+
+        if (response.ok) {
+          alert("Habit added successfully!");
+          window.location.href = "reminders.html";
+        } else {
+          alert("Failed to add habit.");
+        }
+      } catch (error) {
+        console.error("Error adding habit:", error);
+        alert("Error adding habit. Please try again.");
+      }
+    });
+  </script>
+
+  <!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <p>&copy; 2025 Anush Rao. All rights reserved. | Empowering you to build lasting habits.</p>
+    <div class="social-icons">
+      <a href="https://www.facebook.com/Anush.Rao.t" target="_blank" class="social-icon facebook" aria-label="Facebook">
+        <ion-icon name="logo-facebook"></ion-icon>
+      </a>
+      <a href="https://x.com/t_anushrao" target="_blank" class="social-icon twitter" aria-label="Twitter">
+        <ion-icon name="logo-twitter"></ion-icon>
+      </a>
+      <a href="https://www.instagram.com/anush.rao.t/" target="_blank" class="social-icon instagram" aria-label="Instagram">
+        <ion-icon name="logo-instagram"></ion-icon>
+      </a>
+      <a href="https://www.linkedin.com/in/anushrao/" target="_blank" class="social-icon linkedin" aria-label="LinkedIn">
+        <ion-icon name="logo-linkedin"></ion-icon>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<!-- Footer -->
+
+
+
+</body>
+</html>

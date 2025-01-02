@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="https://unpkg.com/ionicons@6.0.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@6.0.0/dist/ionicons/ionicons.js"></script>
+  <title>Reminders</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .container {
+      width: 100%;
+      max-width: 800px;
+      padding: 20px;
+      margin: 0 15px;  /* Added margin to prevent touching the screen edges */
+      box-sizing: border-box; /* Ensure padding is inside the width */
+    }
+    
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .welcome-message {
+      font-size: 18px;
+      color: #333;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    
+    .add-button {
+      display: inline-block;
+      margin-bottom: 20px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+    }
+    
+    .add-button:hover {
+      background-color: #0056b3;
+    }
+    
+    .habits-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+      max-height: 500px;
+      padding-right: 10px;
+    }
+    
+    .habit-item {
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    .habit-details {
+      margin-bottom: 10px;
+    }
+    
+    .habit-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .btn {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .btn-edit {
+      background-color: #ffc107;
+      color: #fff;
+    }
+    
+    .btn-edit:hover {
+      background-color: #e0a800;
+    }
+    
+    .btn-disable {
+      background-color: #6c757d;
+      color: #fff;
+    }
+    
+    .btn-disable:hover {
+      background-color: #5a6268;
+    }
+    
+    .btn-delete {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    
+    .btn-delete:hover {
+      background-color: #c82333;
+    }
+    
+    .logout-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: #dc3545;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .logout-button:hover {
+      background-color: #c82333;
+    }
+    
+    #edit-habit-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Dim background */
+      display: none; /* Hidden by default */
+      justify-content: center;
+      align-items: center;
+    }
+    
+    #edit-habit-form {
+      background-color: white;
+      padding: 20px;
+      border-radius: 5px;
+    }
+    
+    /* Footer Styles */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #444;
+      color: #fff;
+      padding: 10px 0;  /* Increased padding for height */
+      font-size: 0.8rem;
+      font-weight: normal;
+      z-index: 1000;
+      border-top: 1px solid #ccc;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+    
+    .footer p {
+      margin: 0;
+    }
+    
+    .social-icons {
+      position: absolute;
+      right: 20px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .social-icons a {
+      margin: 0 8px;
+      font-size: 1.5rem;  /* Adjust the size of the icons */
+      color: #fff;  /* White icons */
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    
+    .social-icons a:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+    
+    /* Hover effect for icons */
+    .social-icons ion-icon {
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    
+    .social-icons ion-icon:hover {
+      transform: scale(1.1);
+      filter: brightness(1.2);
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .footer {
+        padding: 12px 0;
+        font-size: 0.75rem;
+      }
+    
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+      }
+    
+      .social-icons {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+      }
+    
+      .container {
+        margin: 0 15px;  /* Add margin on left and right for small screens */
+        padding: 20px;
+      }
+    
+      h1 {
+        font-size: 24px;
+      }
+    
+      input[type="text"], input[type="password"], input[type="email"] {
+        font-size: 14px;
+        padding: 10px;
+      }
+    
+      button {
+        font-size: 14px;
+        padding: 10px 18px;
+      }
+    }
+    
+    /* For mobile phones (max-width: 480px) */
+    @media (max-width: 480px) {
+      .footer {
+        padding: 15px 0;
+        font-size: 0.6rem;
+      }
+    
+      .footer-content {
+        flex-direction: column;
+        align-items: center;
+      }
+    
+      .social-icons {
+        position: static;
+        margin-top: 10px;
+        justify-content: center;
+      }
+    
+      .container {
+        margin: 0 15px;  /* Add margin on left and right */
+        padding: 15px;
+      }
+    
+      h1 {
+        font-size: 20px;
+      }
+    
+      input[type="text"], input[type="password"], input[type="email"] {
+        font-size: 12px;
+        padding: 8px;
+      }
+    
+      button {
+        font-size: 12px;
+        padding: 8px 16px;
+      }
+    }
+    
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="welcome-message" id="welcome-message"></div>
+    <h2 style="text-align: center;">Your Habit Journey</h2>
+    <p style="text-align: center; font-size: 1rem; color: #444;">Stay on track with your goals! You’ll receive timely reminders for each habit directly to your email, so you can focus on what matters most without the stress of remembering everything.</p>
+    <a href="add-habit.html" class="add-button">+ Add Habit</a>
+    <div id="habits-container" class="habits-container"></div>
+  </div>
+  
+  <div id="edit-habit-form" style="display: none;">
+    <form id="habit-edit-form">
+      <label for="habit-name">Habit Name</label>
+      <input type="text" id="habit-name" name="habit-name" placeholder="Enter habit name" required>
+  
+      <label for="time">Time</label>
+      <input type="time" id="time" name="time" required>
+  
+      <label for="date">Date</label>
+      <input type="date" id="date" name="date" required>
+  
+      <label for="frequency">Frequency</label>
+      <select id="frequency" name="frequency" required>
+        <option value="onetime">Onetime</option>
+        <option value="daily">Daily</option>
+        <option value="weekly">Weekly</option>
+        <option value="monthly">Monthly</option>
+      </select>
+  
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="4" placeholder="Describe your habit"></textarea>
+  
+      <button type="submit" id="save">Save</button>
+      <button type="button" id="cancel" onclick="cancelEdit()">Cancel</button>
+    </form>
+  </div>
+  
+  <button class="logout-button" onclick="logout()">Logout</button>
+  
+
+  <script>
+    
+    async function getUserData() {
+      const token = sessionStorage.getItem("authToken"); // Ensure the token exists
+      console.log("Token being sent:", token);  // Debugging step to check token
+      
+      if (!token) {
+        alert("User not logged in. Please log in first.");
+        window.location.href = "login.html"; // Redirect to login page if no token
+        return;
+      }
+    
+      try {
+        console.log("Making request to fetch user data...");  // Log when making the request
+        const response = await fetch("http://localhost:5000/user-data", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,  // Sending the token in the header
+            "Content-Type": "application/json"   // Ensure correct content type
+          }
+        });
+    
+        console.log("Response status:", response.status);  // Log the response status
+        
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById("welcome-message").textContent = `Welcome, ${data.username}`;
+          loadHabits(data.username);
+        } else {
+          console.error("Failed to fetch user data:", response.status);  // Log failure
+          alert("Failed to fetch user data. Please try again.");
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);  // Log the error
+        alert("Error fetching user data. Please try again.");
+      }
+    }
+    
+
+
+
+    // Load habits from the database
+    async function loadHabits(username) {
+      const habitsContainer = document.getElementById("habits-container");
+      habitsContainer.innerHTML = "";
+
+      try {
+        const response = await fetch(`http://localhost:5000/habits/username/${username}`);
+        const habits = await response.json();
+
+        if (habits.length === 0) {
+          habitsContainer.innerHTML = "<p>No habits added yet.</p>";
+          return;
+        }
+
+        habits.forEach((habit) => {
+          const habitItem = document.createElement("div");
+          habitItem.classList.add("habit-item");
+
+          habitItem.innerHTML = `
+            <div class="habit-details">
+              <strong>${habit.habitName}</strong><br>
+              <small>Time: ${habit.time} | Date: ${habit.date} | Frequency: ${habit.frequency}</small><br>
+              <p>${habit.description}</p>
+            </div>
+            <div class="habit-buttons">
+            <button class="btn btn-edit" onclick="editHabit('${habit._id}')">Edit</button>
+             <button class="btn btn-toggle" 
+        data-habit-id="${habit._id}" 
+        onclick="toggleHabitStatus('${habit._id}', ${habit.isActive})">
+  ${habit.isActive ? "Disable" : "Enable"}
+</button>
+
+              <button class="btn btn-delete" onclick="deleteHabit('${habit._id}')">Delete</button>
+
+            </div>
+          `;
+
+          habitsContainer.appendChild(habitItem);
+        });
+      } catch (err) {
+        console.error("Error loading habits:", err);
+      }
+    }
+
+    
+      // Function to edit habit
+      async function editHabit(id) {
+        try {
+          // Fetch habit details from the server using the habitId
+          const response = await fetch(`http://localhost:5000/habits/${id}`, {
+            method: "GET", // Use GET to fetch data
+            headers: {
+              "Content-Type": "application/json", // Optional, for clarity
+            },
+          });
+      
+          if (!response.ok) {
+            throw new Error("Failed to fetch habit details");
+          }
+      
+          const habit = await response.json();
+      
+          // Prefill the form fields with the fetched habit details
+          document.getElementById("habit-name").value = habit.habitName;
+          document.getElementById("description").value = habit.description;
+          document.getElementById("date").value = habit.date;
+          document.getElementById("time").value = habit.time;
+          document.getElementById("frequency").value = habit.frequency;
+          
+      
+          // Show the edit-habit form
+          document.getElementById("edit-habit-form").style.display = "block";
+      
+          // Optionally scroll to the form
+          document.getElementById("edit-habit-form").scrollIntoView();
+        } catch (error) {
+          console.error("Error fetching habit details:", error);
+          alert("Failed to load habit details. Please try again.");
+        }
+        document.getElementById("save").addEventListener("click", async function () {
+          const habitName = document.getElementById("habit-name").value;
+          const description = document.getElementById("description").value;
+          const date = document.getElementById("date").value;
+          const time = document.getElementById("time").value;
+          const frequency = document.getElementById("frequency").value;
+        
+          // Prepare the updated habit data
+          const updatedHabit = {
+            habitName,
+            description,
+            date,
+            time,
+            frequency,
+          };
+        console.log(updatedHabit)
+          try {
+            const response = await fetch(`http://localhost:5000/habits/${id}`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(updatedHabit),
+            });
+    
+            if (response.ok) {
+              alert("Habit updated successfully!");
+              window.location.href = "reminders.html";
+            } else {
+              alert("Failed to update habit.");
+            }
+          } catch (error) {
+            console.error("Error updating habit:", error);
+            alert("Error updating habit. Please try again.");
+          }
+        });
+        
+      }
+
+      
+      function cancelEdit() {
+        // Hide the edit-habit-form
+        document.getElementById("edit-habit-form").style.display = "none";
+      
+        // Optionally clear the form fields
+        document.getElementById("habit-edit-form").reset();
+      }
+      
+
+  
+
+    // Disable habit
+    async function toggleHabitStatus(habitId, currentStatus) {
+      const token = sessionStorage.getItem("authToken"); // Get the auth token
+      const newStatus = !currentStatus; // Toggle the current status
+    
+      try {
+        const response = await fetch(`http://localhost:5000/habits/${habitId}/status`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ isActive: newStatus }) // Send the new status
+        });
+    
+        if (response.ok) {
+          alert(`Habit ${newStatus ? "enabled" : "disabled"} successfully!`);
+          
+          // Update the button text dynamically
+          const button = document.querySelector(`[data-habit-id="${habitId}"]`);
+          button.textContent = newStatus ? "Disable" : "Enable";
+          button.setAttribute("onclick", `toggleHabitStatus('${habitId}', ${newStatus})`);
+        } else {
+          alert("Failed to update habit status. Please try again.");
+        }
+      } catch (err) {
+        console.error("Error updating habit status:", err);
+        alert("Error updating habit status. Please try again.");
+      }
+    }
+    
+
+    // Delete habit
+    async function deleteHabit(habitId) {
+      const username = sessionStorage.getItem("username");
+      try {
+        const response = await fetch(`http://localhost:5000/habits/${habitId}`, {
+          method: "DELETE",
+        });
+        if (response.ok) {
+          alert("Habit deleted successfully.");
+          loadHabits(username); // Reload the habits list after deletion
+        } else {
+          alert("Error deleting habit.");
+        }
+      } catch (err) {
+        console.error("Error deleting habit:", err);
+      }
+    }
+
+    // Logout function
+    function logout() {
+      sessionStorage.removeItem("authToken"); // Remove the JWT token
+      window.location.href = "login.html"; // Redirect to login page
+    }
+
+    // Load user data and habits when the page is loaded
+    document.addEventListener("DOMContentLoaded", getUserData);
+  </script>
+
+    <!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <p>&copy; 2025 Anush Rao. All rights reserved. | Empowering you to build lasting habits.</p>
+    <div class="social-icons">
+      <a href="https://www.facebook.com/Anush.Rao.t" target="_blank" class="social-icon facebook" aria-label="Facebook">
+        <ion-icon name="logo-facebook"></ion-icon>
+      </a>
+      <a href="https://x.com/t_anushrao" target="_blank" class="social-icon twitter" aria-label="Twitter">
+        <ion-icon name="logo-twitter"></ion-icon>
+      </a>
+      <a href="https://www.instagram.com/anush.rao.t/" target="_blank" class="social-icon instagram" aria-label="Instagram">
+        <ion-icon name="logo-instagram"></ion-icon>
+      </a>
+      <a href="https://www.linkedin.com/in/anushrao/" target="_blank" class="social-icon linkedin" aria-label="LinkedIn">
+        <ion-icon name="logo-linkedin"></ion-icon>
+      </a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
