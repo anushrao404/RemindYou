@@ -530,103 +530,69 @@ const scheduleReminders = async () => {
   console.log('Scheduling reminders...');
 
   try {
+    // Fetch all active habits from the 'habits' collection
     console.log('Fetching all active habits from the database...');
     const habits = await mongoose.connection.collection('habits').find({ isActive: true }).toArray();
     console.log(`Active habits found: ${habits.length}`);
 
     for (const habit of habits) {
       console.log(`Processing habit: ${JSON.stringify(habit)}`);
+      
       const [hour, minute] = habit.time.split(':').map(Number);
-      console.log(`Parsed time: Hour=${hour}, Minute=${minute}`);
+      console.log(`Parsed IST time: Hour=${hour}, Minute=${minute}`);
+      
       console.log(`Fetching user details for username: ${habit.username}`);
-
-      // Fetch user details to get the email
       const user = await mongoose.connection.collection('users').findOne({ username: habit.username });
       if (!user || !user.email) {
         console.error(`Email not found for username: ${habit.username}`);
-        continue; // Skip scheduling if email is not found
+        continue;
       }
 
-      // Email of the user
       const email = user.email;
       console.log(`User email found: ${email}`);
 
-      // Convert IST to UTC for scheduling
-      const convertToUTC = (date) => {
-        const utcDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-        return utcDate;
-      };
+      // Convert habit date and time (IST) to UTC
+      const [year, month, day] = habit.date.split('-').map(Number);
+      const reminderISTDate = new Date(year, month - 1, day, hour, minute);
+      const reminderUTCDate = new Date(reminderISTDate.getTime() - 5.5 * 60 * 60 * 1000); // Subtract 5.5 hours to get UTC
 
-      // Schedule based on the habit's frequency
-      if (habit.frequency === 'daily') {
+      console.log(`One-time habit ${habit.habitName} UTC reminder date: ${reminderUTCDate}`);
+
+      // Schedule the job
+      if (habit.frequency === 'onetime' && reminderUTCDate > new Date() && habit.isActive) {
+        schedule.scheduleJob(reminderUTCDate, () => {
+          console.log(`Triggering one-time reminder email for habit: ${habit.habitName}`);
+          sendReminderEmail(email, habit);
+        });
+      } else if (habit.frequency === 'daily') {
         console.log(`Scheduling daily reminder for habit: ${habit.habitName}`);
-        const now = new Date();
-        now.setHours(hour, minute, 0, 0); // Set time for the reminder
-        const reminderTimeUTC = convertToUTC(now);
-        const cronExpression = `${reminderTimeUTC.getUTCMinutes()} ${reminderTimeUTC.getUTCHours()} * * *`;
-        console.log(`Daily habit ${habit.habitName} UTC cron expression: ${cronExpression}`);
-
-        schedule.scheduleJob(cronExpression, () => {
+        schedule.scheduleJob(`${minute} ${hour} * * *`, () => {
           if (habit.isActive) {
             sendReminderEmail(email, habit);
           } else {
             console.log(`Daily habit ${habit.habitName} is no longer active.`);
           }
         });
-      } 
-      
-      else if (habit.frequency === "weekly" && habit.date) {
+      } else if (habit.frequency === 'weekly') {
         console.log(`Scheduling weekly reminder for habit: ${habit.habitName}`);
-        const [year, month, day] = habit.date.split("-").map(Number);
-        const reminderDate = new Date(year, month - 1, day, hour, minute);
-        const reminderTimeUTC = convertToUTC(reminderDate);
-        const dayOfWeek = reminderTimeUTC.getUTCDay();
-        const cronExpression = `${reminderTimeUTC.getUTCMinutes()} ${reminderTimeUTC.getUTCHours()} * * ${dayOfWeek}`;
-        console.log(`Weekly habit ${habit.habitName} UTC cron expression: ${cronExpression}`);
-
-        schedule.scheduleJob(cronExpression, () => {
+        const dayOfWeek = reminderISTDate.getDay();
+        schedule.scheduleJob(`${minute} ${hour} * * ${dayOfWeek}`, () => {
           if (habit.isActive) {
             sendReminderEmail(email, habit);
           } else {
             console.log(`Weekly habit ${habit.habitName} is no longer active.`);
           }
         });
-      }
-
-      else if (habit.frequency === 'monthly') {
+      } else if (habit.frequency === 'monthly') {
         console.log(`Scheduling monthly reminder for habit: ${habit.habitName}`);
-        const now = new Date();
-        now.setHours(hour, minute, 0, 0);
-        const reminderTimeUTC = convertToUTC(now);
-        const cronExpression = `${reminderTimeUTC.getUTCMinutes()} ${reminderTimeUTC.getUTCHours()} 1 * *`;
-        console.log(`Monthly habit ${habit.habitName} UTC cron expression: ${cronExpression}`);
-
-        schedule.scheduleJob(cronExpression, () => {
+        schedule.scheduleJob(`${minute} ${hour} 1 * *`, () => {
           if (habit.isActive) {
             sendReminderEmail(email, habit);
           } else {
             console.log(`Monthly habit ${habit.habitName} is no longer active.`);
           }
         });
-      }
-
-      else if (habit.frequency === 'onetime' && habit.date) {
-        console.log(`Scheduling one-time reminder for habit: ${habit.habitName}`);
-        const [year, month, day] = habit.date.split('-').map(Number);
-        const reminderDate = new Date(year, month - 1, day, hour, minute);
-        const reminderTimeUTC = convertToUTC(reminderDate);
-        console.log(`One-time habit ${habit.habitName} UTC reminder date: ${reminderTimeUTC}`);
-
-        if (reminderTimeUTC > new Date() && habit.isActive) {
-          schedule.scheduleJob(reminderTimeUTC, () => {
-            sendReminderEmail(email, habit);
-          });
-        } else {
-          console.warn(`One-time habit ${habit.habitName} is either inactive or scheduled for a past date.`);
-        }
-      } 
-      
-      else {
+      } else {
         console.warn(`Invalid frequency for habit: ${habit.habitName}`);
       }
     }
