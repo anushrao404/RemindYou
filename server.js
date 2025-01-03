@@ -19,18 +19,6 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 // MongoDB Connection
-// mongoose
-//   .connect("mongodb+srv://teermanwaranush:Anushrao9866@habittrackerwebsite.js272.mongodb.net/", {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => {
-//     console.log("MongoDB connected");
-//     scheduleReminders();
-//   })
-//   .catch((err) => console.error("MongoDB connection failed:", err));
-
-// MongoDB Connection
 mongoose
   .connect("mongodb+srv://teermanwaranush:Anushrao9866@habittrackerwebsite.js272.mongodb.net/")
   .then(() => {

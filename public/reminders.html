@@ -281,6 +281,87 @@
     }
     
 
+
+    
+
+    #edit-habit-form {
+      display: none;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      margin: 30px auto;
+      box-sizing: border-box;
+    }
+    
+    #habit-edit-form {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    
+    #habit-edit-form label {
+      font-size: 14px;
+      margin-bottom: 8px;
+      display: block;
+      font-weight: bold;
+    }
+    
+    #habit-edit-form input,
+    #habit-edit-form select,
+    #habit-edit-form textarea,
+    #habit-edit-form button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 16px;
+    }
+    
+    #habit-edit-form textarea {
+      resize: none;
+    }
+    
+    #habit-edit-form button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 12px;
+    }
+    
+    #habit-edit-form button:hover {
+      background-color: #0056b3;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      #edit-habit-form {
+        padding: 15px;
+        max-width: 100%;
+      }
+    
+      #habit-edit-form label {
+        font-size: 12px;
+      }
+    
+      #habit-edit-form input,
+      #habit-edit-form select,
+      #habit-edit-form textarea,
+      #habit-edit-form button {
+        font-size: 14px;
+      }
+    
+      #habit-edit-form button {
+        padding: 8px 16px;
+      }
+    }
+    
+
   </style>
 </head>
 <body>
@@ -433,6 +514,7 @@
       
           // Show the edit-habit form
           document.getElementById("edit-habit-form").style.display = "block";
+          document.getElementById("habits-container").style.display = "none";
       
           // Optionally scroll to the form
           document.getElementById("edit-habit-form").scrollIntoView();
@@ -446,6 +528,7 @@
           const date = document.getElementById("date").value;
           const time = document.getElementById("time").value;
           const frequency = document.getElementById("frequency").value;
+        
         
           // Prepare the updated habit data
           const updatedHabit = {
@@ -467,7 +550,9 @@
     
             if (response.ok) {
               alert("Habit updated successfully!");
+              document.getElementById("habits-container").style.display = "block";
               window.location.href = "reminders.html";
+            
             } else {
               alert("Failed to update habit.");
             }
@@ -483,9 +568,10 @@
       function cancelEdit() {
         // Hide the edit-habit-form
         document.getElementById("edit-habit-form").style.display = "none";
-      
+       
         // Optionally clear the form fields
         document.getElementById("habit-edit-form").reset();
+        document.getElementById("habits-container").style.display = "block";
       }
       
 
