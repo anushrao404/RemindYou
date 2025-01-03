@@ -8,7 +8,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
       return;
     }
   
-    const response = await fetch("http://localhost:5000/login", {
+    const response = await fetch("https://remindyou.onrender.com/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,7 +43,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
       return;
     }
   
-    const response = await fetch("http://localhost:5000/forgot-password", {
+    const response = await fetch("https://remindyou.onrender.com/forgot-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -78,7 +78,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
       return;
     }
   
-    const response = await fetch("http://localhost:5000/reset-password", {
+    const response = await fetch("https://remindyou.onrender.com/reset-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

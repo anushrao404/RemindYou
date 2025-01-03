@@ -457,7 +457,7 @@
           };
         console.log(updatedHabit)
           try {
-            const response = await fetch(`http://localhost:5000/habits/${id}`, {
+            const response = await fetch(`https://remindyou.onrender.com/habits/${id}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -497,7 +497,7 @@
       const newStatus = !currentStatus; // Toggle the current status
     
       try {
-        const response = await fetch(`http://localhost:5000/habits/${habitId}/status`, {
+        const response = await fetch(`https://remindyou.onrender.com/habits/${habitId}/status`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json"
@@ -526,7 +526,7 @@
     async function deleteHabit(habitId) {
       const username = sessionStorage.getItem("username");
       try {
-        const response = await fetch(`http://localhost:5000/habits/${habitId}`, {
+        const response = await fetch(`https://remindyou.onrender.com/habits/${habitId}`, {
           method: "DELETE",
         });
         if (response.ok) {
