@@ -511,7 +511,9 @@ const scheduleReminders = async () => {
         console.warn(`Invalid frequency for habit: ${habit.habitName}`);
       }
     }
-
+    schedule.scheduleJob('*/1 * * * *', () => {
+      console.log('Test job executed at', new Date());
+    });
     console.log('Reminders scheduled successfully.');
   } catch (error) {
     console.error('Error scheduling reminders:', error);
