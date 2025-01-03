@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Ionicons CDN -->
+    <link rel="stylesheet" href="loader.css"> <!-- Your CSS -->
+    <script src="loader.js" defer></script> <!-- Your JavaScript -->
     <script type="module" src="https://unpkg.com/ionicons@6.0.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@6.0.0/dist/ionicons/ionicons.js"></script>
   
@@ -236,6 +238,9 @@
   </style>
 </head>
 <body>
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
   <div class="container">
     <h1>Add Habit</h1>
     <form id="add-habit-form">
