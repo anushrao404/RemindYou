@@ -293,8 +293,8 @@ app.post("/habits",verifyToken, async (req, res) => {
   try {
     const newHabit = new Habit({ username, habitName, description, date, time, frequency });
     await newHabit.save();
-    res.json({ message: "Habit added successfully", habit: newHabit });
     scheduleReminders();
+    res.json({ message: "Habit added successfully", habit: newHabit });
   } catch (err) {
     console.error("Error adding habit:", err);
     res.status(500).json({ message: "Error adding habit" });
@@ -325,7 +325,7 @@ app.post("/habits/:id", async (req, res) => {
       return res.status(404).json({ message: "Habit not found" });
     }
     scheduleReminders();
-    // console.log("Updated Habit:", updatedHabit);
+    console.log("Updated Habit:", updatedHabit);
     res.json(updatedHabit); // Respond with the updated habit data
   } catch (error) {
     console.error("Error updating habit:", error);
